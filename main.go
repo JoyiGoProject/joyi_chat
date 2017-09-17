@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "joyiyi_chat/routers"
+	"fmt"
 	"net"
 
 	"github.com/astaxie/beego"
@@ -13,6 +13,7 @@ func main() {
 	CheckErr(err)
 	defer listen_socket.Close()
 
+	fmt.Println("服务端等待中...")
 	//循环接收数据
 	for {
 		conn, err := listen_socket.Accept()
@@ -28,9 +29,14 @@ func ProcessInfo(conn net.Conn) {
 
 	//不断进行读取
 	for {
-		_, err := conn.Read(buf)
-		CheckErr(err)
-		beego.Info("Has this message: %s", string(buf))
+		numOfBytes, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("读取数据错误：", err)
+			break
+		}
+		if numOfBytes != 0 {
+			beego.Info("Has this message: %s", string(buf))
+		}
 	}
 }
 

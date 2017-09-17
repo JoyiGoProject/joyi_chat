@@ -1,1 +1,1 @@
-## A chatroot project written in Golang.
+## A chatroom project written in Golang.
